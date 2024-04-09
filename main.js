@@ -1,4 +1,4 @@
-import { Bodies, Body, Engine, Render, Runner, World } from "matter-js";
+import { Bodies, Body, Engine, Events, Render, Runner, World } from "matter-js";
 import { FRUITS } from "./fruits";
 
 const engine = Engine.create();
@@ -71,16 +71,20 @@ window.onkeydown = (event) => {
   }
   switch (event.keyCode) {
     case 39:
-      Body.setPosition(currentBody, {
-        x: currentBody.position.x + 10,
-        y: currentBody.position.y,
-      });
+      if (currentBody.position.x + currentFruit.radius < 645) {
+        Body.setPosition(currentBody, {
+          x: currentBody.position.x + 10,
+          y: currentBody.position.y,
+        });
+      }
       break;
     case 37:
-      Body.setPosition(currentBody, {
-        x: currentBody.position.x - 10,
-        y: currentBody.position.y,
-      });
+      if (currentBody.position.x - currentFruit.radius > 35) {
+        Body.setPosition(currentBody, {
+          x: currentBody.position.x - 10,
+          y: currentBody.position.y,
+        });
+      }
       break;
     case 40:
       currentBody.isSleeping = false;
@@ -93,5 +97,35 @@ window.onkeydown = (event) => {
       break;
   }
 };
+
+Events.on(engine, "collisionStart", (event) => {
+  event.pairs.forEach((collision) => {
+    if (collision.bodyA.index === collision.bodyB.index) {
+      const index = collision.bodyA.index;
+
+      if (index === FRUITS.length - 1) {
+        return;
+      }
+
+      World.remove(world, [collision.bodyA, collision.bodyB]);
+
+      const newFruit = FRUITS[index + 1];
+
+      const newBody = Bodies.circle(
+        collision.collision.supports[0].x,
+        collision.collision.supports[0].y,
+        newFruit.radius,
+        {
+          render: {
+            sprite: { texture: `${newFruit.name}.png` },
+          },
+          index: index + 1,
+        }
+      );
+
+      World.add(world, newBody);
+    }
+  });
+});
 
 addFruit();
