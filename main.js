@@ -47,6 +47,7 @@ let currentBody = null;
 let currentFruit = null;
 let disableAction = false;
 let isOver = false;
+let interval = null;
 
 function addFruit() {
   if (!isOver) {
@@ -75,20 +76,26 @@ window.onkeydown = (event) => {
   }
   switch (event.keyCode) {
     case 39:
-      if (currentBody.position.x + currentFruit.radius < 570) {
-        Body.setPosition(currentBody, {
-          x: currentBody.position.x + 10,
-          y: currentBody.position.y,
-        });
-      }
+      if (interval) return;
+      interval = setInterval(() => {
+        if (currentBody.position.x + currentFruit.radius < 570) {
+          Body.setPosition(currentBody, {
+            x: currentBody.position.x + 1,
+            y: currentBody.position.y,
+          });
+        }
+      }, 5);
       break;
     case 37:
-      if (currentBody.position.x - currentFruit.radius > 35) {
-        Body.setPosition(currentBody, {
-          x: currentBody.position.x - 10,
-          y: currentBody.position.y,
-        });
-      }
+      if (interval) return;
+      interval = setInterval(() => {
+        if (currentBody.position.x - currentFruit.radius > 35) {
+          Body.setPosition(currentBody, {
+            x: currentBody.position.x - 1,
+            y: currentBody.position.y,
+          });
+        }
+      }, 5);
       break;
     case 40:
       currentBody.isSleeping = false;
@@ -99,6 +106,15 @@ window.onkeydown = (event) => {
         disableAction = false;
       }, 500);
       break;
+  }
+};
+
+window.onkeyup = (event) => {
+  switch (event.keyCode) {
+    case 39:
+    case 37:
+      clearInterval(interval);
+      interval = null;
   }
 };
 
