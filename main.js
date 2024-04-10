@@ -9,7 +9,7 @@ const render = Render.create({
   options: {
     wireframes: false,
     background: "#F7F4C8",
-    width: 680,
+    width: 600,
     height: 730,
   },
 });
@@ -21,17 +21,18 @@ const leftWall = Bodies.rectangle(15, 350, 30, 740, {
   render: { fillStyle: "#E6B143" },
 });
 
-const rightWall = Bodies.rectangle(665, 350, 30, 740, {
+const rightWall = Bodies.rectangle(585, 350, 30, 740, {
   isStatic: true,
   render: { fillStyle: "#E6B143" },
 });
 
-const ground = Bodies.rectangle(310, 720, 740, 60, {
+const ground = Bodies.rectangle(310, 720, 630, 60, {
   isStatic: true,
   render: { fillStyle: "#E6B143" },
 });
 
 const topLine = Bodies.rectangle(310, 130, 740, 2, {
+  name: "topLine",
   isStatic: true,
   isSensor: true,
   render: { fillStyle: "E6B143" },
@@ -45,24 +46,27 @@ Runner.run(runner, engine);
 let currentBody = null;
 let currentFruit = null;
 let disableAction = false;
+let isOver = false;
 
 function addFruit() {
-  const index = Math.floor(Math.random() * 5);
-  const fruit = FRUITS[index];
+  if (!isOver) {
+    const index = Math.floor(Math.random() * 6);
+    const fruit = FRUITS[index];
 
-  const body = Bodies.circle(300, 50, fruit.radius, {
-    index,
-    isSleeping: true,
-    render: {
-      sprite: { texture: `${fruit.name}.png` },
-    },
-    restitution: 0.2,
-  });
+    const body = Bodies.circle(300, 50, fruit.radius, {
+      index,
+      isSleeping: true,
+      render: {
+        sprite: { texture: `${fruit.name}.png` },
+      },
+      restitution: 0.2,
+    });
 
-  currentBody = body;
-  currentFruit = fruit;
+    currentBody = body;
+    currentFruit = fruit;
 
-  World.add(world, body);
+    World.add(world, body);
+  }
 }
 
 window.onkeydown = (event) => {
@@ -71,7 +75,7 @@ window.onkeydown = (event) => {
   }
   switch (event.keyCode) {
     case 39:
-      if (currentBody.position.x + currentFruit.radius < 645) {
+      if (currentBody.position.x + currentFruit.radius < 570) {
         Body.setPosition(currentBody, {
           x: currentBody.position.x + 10,
           y: currentBody.position.y,
@@ -93,7 +97,7 @@ window.onkeydown = (event) => {
       setTimeout(() => {
         addFruit();
         disableAction = false;
-      }, 1000);
+      }, 500);
       break;
   }
 };
@@ -102,10 +106,6 @@ Events.on(engine, "collisionStart", (event) => {
   event.pairs.forEach((collision) => {
     if (collision.bodyA.index === collision.bodyB.index) {
       const index = collision.bodyA.index;
-
-      if (index === FRUITS.length - 1) {
-        return;
-      }
 
       World.remove(world, [collision.bodyA, collision.bodyB]);
 
@@ -124,6 +124,19 @@ Events.on(engine, "collisionStart", (event) => {
       );
 
       World.add(world, newBody);
+
+      if (newBody.index === FRUITS.length - 1) {
+        alert("Win !");
+        isOver = true;
+      }
+    }
+
+    if (
+      !disableAction &&
+      (collision.bodyA.name === "topLine" || collision.bodyB.name === "topLine")
+    ) {
+      alert("Game over");
+      isOver = true;
     }
   });
 });
