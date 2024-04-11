@@ -51,7 +51,7 @@ let interval = null;
 
 function addFruit() {
   if (!isOver) {
-    const index = Math.floor(Math.random() * 6);
+    const index = Math.floor(Math.random() * 7);
     const fruit = FRUITS[index];
 
     const body = Bodies.circle(300, 50, fruit.radius, {
@@ -142,8 +142,10 @@ Events.on(engine, "collisionStart", (event) => {
       World.add(world, newBody);
 
       if (newBody.index === FRUITS.length - 1) {
-        alert("Win !");
         isOver = true;
+        setTimeout(() => {
+          alert("Win !");
+        }, 1000);
       }
     }
 
