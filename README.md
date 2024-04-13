@@ -2,8 +2,6 @@
 
 닌텐도 Suika-Game을 웹버전으로 제작하였습니다.
 
-![SuikaGame](public/SuikaGame.png)
-
 ## 👩🏻‍💻 개발자 소개
 
 <table>
@@ -31,3 +29,5 @@
 2. `↓ 아래쪽 키` 를 사용하여 과일 떨어뜨리기.
 3. 같은 과일끼리 부딪혀 다음 과일 생성하기.
 4. Top-Line 에 닿기 전에 수박이 생성되면 승리!
+
+![suikagame](public/SuikaGame.png)
