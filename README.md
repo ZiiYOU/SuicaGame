@@ -1,14 +1,10 @@
 # 🍉 Suika-Game
 
----
-
 닌텐도 Suika-Game을 웹버전으로 제작하였습니다.
 
 ![SuikaGame](public/SuikaGame.png)
 
 ## 👩🏻‍💻 개발자 소개
-
----
 
 <table>
   <tbody>
@@ -20,13 +16,9 @@
 
 ## ⚙️ 기술 스택
 
----
-
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=white"><img src="https://img.shields.io/badge/Html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"><img src="https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white"><img src="https://img.shields.io/badge/Matter.js-4B5562?style=for-the-badge&logo=Matter.js&logoColor=white">
 
 ## 📌 주요 기능
-
----
 
 **1. matter-js** 라이브러리를 통해 물리엔진 구현.<br/>
 **2.** 충돌할 경우, 다음 과일로 생성.<br/>
